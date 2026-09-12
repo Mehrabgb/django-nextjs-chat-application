@@ -1,0 +1,48 @@
+services:
+
+  backend:
+    build: ./backend
+    container_name: chat-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_NAME: fullstack-chat-app
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: mhrb9215gb
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DJANGO_SECRET_KEY: 'django-insecure-o+(eldo3o81r2557cdq_v*0rkr1uy9ea0*=$$dl=u*s6rgak(j_'
+    volumes:
+      - ./backend/media:/app/media
+
+  db:
+    image: postgres:17
+    container_name: chat-db
+    environment:
+      POSTGRES_DB: fullstack-chat-app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mhrb9215gb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/demo.sql:/docker-entrypoint-initdb.d/01-demo.sql:ro
+  redis:
+    image: redis:7.4
+    container_name: chat-redis
+    ports:
+      - "6379:6379"
+
+  frontend:
+    build: ./frontend
+    container_name: nextjs_frontend
+
+    ports:
+      - "3000:3000"
+
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
