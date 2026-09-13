@@ -8,8 +8,7 @@ export default async function EditProfileAction(prevState,formData){
   const username=formData.get('username')
   const image=formData.get('image')
   const bio=formData.get('bio')
-  const hasProfile = formData.get('has_profile') === 'true'
-  const method = hasProfile ? 'PATCH' : 'POST'
+  const method = 'PATCH'
   const data = new FormData()
 
     data.append('username', username)
